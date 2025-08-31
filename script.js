@@ -60,8 +60,7 @@ viagens.forEach((viagem, index) => {
           <p class="card-text">${viagem.descricao}</p>
             <a href="${viagem.pdf}" target="_blank" class="btn btn-primary ${
     viagem.pdf ? "" : "disabled"
-  }">Ver Folder
-  </a>
+  }">Ver Detalhes</a>
         </div>
       </div>
     </div>
