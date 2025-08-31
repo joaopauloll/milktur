@@ -1,9 +1,40 @@
 html {
-  scroll-padding-top: 70px; /* ajusta o offset para todos os links de âncora */
+  scroll-padding-top: 66px; /* ajusta o offset para todos os links de âncora */
 }
 
-#info {
-  background-color: hsl(230, 87%, 94%);
+.bg-primary {
+  background-color: #242f60 !important;
+}
+.text-primary {
+  color: #242f60 !important;
+}
+.btn-primary {
+  background-color: #242f60;
+  border-color: #242f60;
+}
+.btn-primary:hover {
+  background-color: #1b2347;
+  border-color: #1b2347;
+}
+
+.bg-secondary {
+  background-color: #254f9c !important;
+}
+.text-secondary {
+  color: #254f9c !important;
+}
+.btn-secondary {
+  background-color: #254f9c;
+  border-color: #254f9c;
+}
+.btn-secondary:hover {
+  background-color: #1e3e7a;
+  border-color: #1e3e7a;
+}
+
+#sobre {
+  background-color: #25989c;
+  color: #fff;
 }
 
 .card-img-fixed {

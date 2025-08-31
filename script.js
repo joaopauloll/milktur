@@ -20,6 +20,12 @@ const viagens = [
     imagem: "assets/imgs/canoa-quebrada.png",
     pdf: "",
   },
+  {
+    nome: "Semana Santa",
+    descricao: "Recife, Gravatá e Nova Jerusalém.",
+    imagem: "assets/imgs/jerusalem.png",
+    pdf: "assets/pdfs/semana-santa.pdf",
+  },
 ];
 
 window.addEventListener("scroll", () => {
@@ -58,7 +64,7 @@ viagens.forEach((viagem, index) => {
         <div class="card-body">
           <h5 class="card-title">${viagem.nome}</h5>
           <p class="card-text">${viagem.descricao}</p>
-            <a href="${viagem.pdf}" target="_blank" class="btn btn-primary ${
+            <a href="${viagem.pdf}" target="_blank" class="btn btn-secondary ${
     viagem.pdf ? "" : "disabled"
   }">Ver Detalhes</a>
         </div>
