@@ -2,6 +2,10 @@ html {
   scroll-padding-top: 70px; /* ajusta o offset para todos os links de âncora */
 }
 
+#info {
+  background-color: hsl(230, 87%, 94%);
+}
+
 .card-img-fixed {
   width: 100%;
   height: 250px; /* altura padrão para desktop */
