@@ -15,7 +15,10 @@
     iconMoon.style.display = ativo ? "none" : "";
     iconSun.style.display = ativo ? "" : "none";
     localStorage.setItem("milktur-dark", ativo ? "1" : "0");
-    toggle.setAttribute("aria-label", ativo ? "Desativar modo escuro" : "Ativar modo escuro");
+    toggle.setAttribute(
+      "aria-label",
+      ativo ? "Desativar modo escuro" : "Ativar modo escuro",
+    );
   }
 
   // Sincroniza ícone com o estado atual (que pode ter sido definido pelo anti-FOUC)
@@ -51,30 +54,50 @@ const sections = document.querySelectorAll("section");
 const navLinks = document.querySelectorAll(".nav-link");
 let scrollTimeout;
 
-window.addEventListener("scroll", () => {
-  clearTimeout(scrollTimeout);
-  scrollTimeout = setTimeout(() => {
-    let current = "";
+function atualizarNavAtiva() {
+  const scrollBottom = window.scrollY + window.innerHeight;
+  const docHeight = document.documentElement.scrollHeight;
+  const noFundo = scrollBottom >= docHeight - 4; // tolerância de 4px
 
+  let current = "";
+
+  if (noFundo) {
+    // Quando o usuário chegou ao fim, a última seção é a ativa
+    current = sections[sections.length - 1].getAttribute("id");
+  } else {
+    // Destaca a última seção cujo topo já passou a linha de 30% do viewport.
+    // Ao iterar em ordem de DOM (cima→baixo), `current` é sobrescrito
+    // sempre que uma seção se qualifica — garantindo que seções curtas
+    // (como #sobre) também sejam destacadas corretamente.
+    const triggerY = window.innerHeight * 0.3;
     sections.forEach((section) => {
-      const sectionTop = section.getBoundingClientRect().top;
-      const sectionHeight = section.offsetHeight;
-
-      if (
-        sectionTop <= window.innerHeight * 0.2 &&
-        sectionTop + sectionHeight > window.innerHeight * 0.2
-      ) {
+      if (section.getBoundingClientRect().top <= triggerY) {
         current = section.getAttribute("id");
       }
     });
+  }
 
-    navLinks.forEach((link) => {
-      link.classList.remove("active");
-      if (link.getAttribute("href") === `#${current}`) {
-        link.classList.add("active");
-      }
-    });
-  }, 50);
+  navLinks.forEach((link) => {
+    link.classList.remove("active");
+    if (link.getAttribute("href") === `#${current}`) {
+      link.classList.add("active");
+    }
+  });
+}
+
+window.addEventListener("scroll", () => {
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(atualizarNavAtiva, 50);
+});
+
+// Fecha o menu mobile ao clicar em qualquer link da navbar
+navLinks.forEach((link) => {
+  link.addEventListener("click", () => {
+    const navbarCollapse = document.getElementById("navbarNav");
+    if (navbarCollapse && navbarCollapse.classList.contains("show")) {
+      bootstrap.Collapse.getOrCreateInstance(navbarCollapse).hide();
+    }
+  });
 });
 
 // ============================================================

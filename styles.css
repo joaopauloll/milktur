@@ -130,6 +130,30 @@ html.dark-mode .contact-divider::after {
   display: block;
 }
 
+/*
+  Posicionamento do toggle na navbar:
+  Mobile (<992px): ms-auto empurra o toggle para a direita
+                   → logo | [espaço] | toggle | hamburger
+  Desktop (≥992px): toggle aparece DEPOIS dos itens via CSS order
+                    → logo | nav-items | toggle
+*/
+@media (max-width: 991.98px) {
+  #dark-mode-toggle {
+    margin-left: auto;
+    margin-right: 4px;
+  }
+}
+
+@media (min-width: 992px) {
+  .navbar-collapse {
+    order: 1;
+  }
+  #dark-mode-toggle {
+    order: 2;
+    margin-left: 0.75rem;
+  }
+}
+
 /* ============================================
    CONFIGURAÇÕES GLOBAIS
    ============================================ */
