@@ -306,10 +306,7 @@ body {
    FORMULÁRIO DE CONTATO
    ============================================ */
 #contact-form {
-  background-color: #f8f9fa;
-  padding: 2rem;
-  border-radius: 0.5rem;
-  box-shadow: var(--box-shadow);
+  /* visual tratado pelo .email-form-panel */
 }
 
 .form-label {
@@ -552,7 +549,11 @@ section h2::after {
   }
 
   #contact-form {
-    padding: 1.5rem;
+    padding: 0;
+  }
+
+  .email-form-panel {
+    padding: 1rem;
   }
 
   .card {
@@ -668,6 +669,74 @@ section h2::after {
   padding: 0 1rem;
   font-size: 0.875rem;
   white-space: nowrap;
+}
+
+/* Botão toggle do formulário de email */
+.email-form-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+}
+
+.email-form-toggle:hover {
+  border-color: var(--secondary-color);
+  color: var(--secondary-color);
+  background-color: rgba(37, 79, 156, 0.04);
+}
+
+.email-form-toggle .toggle-label-open {
+  display: none;
+}
+
+.email-form-toggle:not(.collapsed) .toggle-label-open {
+  display: inline;
+}
+
+.email-form-toggle:not(.collapsed) .toggle-label-closed {
+  display: none;
+}
+
+.toggle-chevron {
+  margin-left: auto;
+  transition: transform var(--transition-speed) ease;
+}
+
+.email-form-toggle:not(.collapsed) .toggle-chevron {
+  transform: rotate(180deg);
+}
+
+/* Painel do formulário */
+.email-form-panel {
+  background-color: var(--bg-surface, #f8f9fa);
+  border: 1px solid var(--border-color);
+  border-top: none;
+  border-radius: 0 0 0.5rem 0.5rem;
+  padding: 1.5rem;
+}
+
+html.dark-mode .email-form-toggle {
+  color: var(--text-muted);
+  border-color: var(--border-color);
+}
+
+html.dark-mode .email-form-toggle:hover {
+  border-color: #6b7280;
+  color: #d1d5db;
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+html.dark-mode .email-form-panel {
+  background-color: var(--bg-surface);
+  border-color: var(--border-color);
 }
 
 /* ============================================
