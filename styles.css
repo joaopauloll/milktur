@@ -333,10 +333,16 @@ footer p {
    ============================================ */
 #inicio {
   position: relative;
-  background-attachment: fixed; /* parallax no desktop */
+  /* image-set: serve .webp para browsers que suportam, .png como fallback */
+  /* ✏️ Quando tiver inicio.webp, ele será usado automaticamente           */
+  background-image: image-set(
+    url("assets/imgs/inicio.webp") type("image/webp"),
+    url("assets/imgs/inicio.png") type("image/png")
+  );
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  background-attachment: fixed; /* parallax no desktop */
   min-height: 100vh;
 }
 

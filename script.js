@@ -3,16 +3,17 @@
 // ✏️ Substitua os valores abaixo com suas credenciais em:
 //    https://dashboard.emailjs.com
 // ============================================================
-const EMAILJS_PUBLIC_KEY = "SUA_PUBLIC_KEY_AQUI";
-const EMAILJS_SERVICE_ID = "SEU_SERVICE_ID_AQUI";
-const EMAILJS_TEMPLATE_ID = "SEU_TEMPLATE_ID_AQUI";
+const EMAILJS_PUBLIC_KEY = "V1_4ZdHs6_lfRGRkL";
+const EMAILJS_SERVICE_ID = "service_7suojhl";
+const EMAILJS_TEMPLATE_ID = "template_3kz5e5u";
 
 // Inicializa EmailJS apenas se o SDK estiver carregado e a chave configurada
+// EmailJS v4 exige objeto { publicKey } — string simples não funciona na v4
 if (
   typeof emailjs !== "undefined" &&
   EMAILJS_PUBLIC_KEY !== "SUA_PUBLIC_KEY_AQUI"
 ) {
-  emailjs.init(EMAILJS_PUBLIC_KEY);
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
 }
 
 // ============================================================
@@ -277,7 +278,11 @@ contactForm.addEventListener("submit", async (e) => {
     formMessage.innerHTML = naoConfigurado
       ? "<strong>Formulário não configurado.</strong> Configure o EmailJS em script.js para ativar o envio."
       : "<strong>✗ Erro ao enviar.</strong> Tente novamente ou entre em contato pelo WhatsApp.";
-    console.error("EmailJS error:", error);
+    console.error(
+      "EmailJS error:",
+      error?.status,
+      error?.text ?? error?.message ?? error,
+    );
   } finally {
     submitBtn.disabled = false;
     document.getElementById("submit-spinner").classList.add("d-none");
