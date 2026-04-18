@@ -1,4 +1,32 @@
 // ============================================================
+// DARK MODE TOGGLE
+// Padrão: desativado (modo claro). Preferência salva em localStorage.
+// A classe html.dark-mode é adicionada pelo script anti-FOUC no <head>
+// antes do CSS carregar, para evitar flash de conteúdo incorreto.
+// ============================================================
+(function () {
+  const toggle = document.getElementById("dark-mode-toggle");
+  const iconMoon = document.getElementById("icon-moon");
+  const iconSun = document.getElementById("icon-sun");
+  const html = document.documentElement;
+
+  function aplicarDarkMode(ativo) {
+    html.classList.toggle("dark-mode", ativo);
+    iconMoon.style.display = ativo ? "none" : "";
+    iconSun.style.display = ativo ? "" : "none";
+    localStorage.setItem("milktur-dark", ativo ? "1" : "0");
+    toggle.setAttribute("aria-label", ativo ? "Desativar modo escuro" : "Ativar modo escuro");
+  }
+
+  // Sincroniza ícone com o estado atual (que pode ter sido definido pelo anti-FOUC)
+  aplicarDarkMode(html.classList.contains("dark-mode"));
+
+  toggle.addEventListener("click", () => {
+    aplicarDarkMode(!html.classList.contains("dark-mode"));
+  });
+})();
+
+// ============================================================
 // CONFIGURAÇÃO DO EMAILJS
 // ✏️ Substitua os valores abaixo com suas credenciais em:
 //    https://dashboard.emailjs.com

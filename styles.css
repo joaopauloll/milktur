@@ -14,6 +14,120 @@
   --transition-speed: 0.3s;
   --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   --box-shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+  /* Cores de superfície (cards, formulário, fundo) */
+  --bg-body: #ffffff;
+  --bg-surface: #f8f9fa;
+  --bg-card: #ffffff;
+}
+
+/* ============================================
+   DARK MODE — ativado pelo botão na navbar
+   A classe html.dark-mode é adicionada via JS
+   e salva no localStorage (padrão: desativado)
+   ============================================ */
+html.dark-mode {
+  --text-dark: #f3f4f6;
+  --text-muted: #9ca3af;
+  --border-color: #374151;
+  --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
+  --box-shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.5);
+  --bg-body: #111827;
+  --bg-surface: #1f2937;
+  --bg-card: #1f2937;
+  color-scheme: dark;
+}
+
+html.dark-mode body {
+  background-color: var(--bg-body);
+  color: var(--text-dark);
+}
+
+/* Seções */
+html.dark-mode #viagens,
+html.dark-mode #contato {
+  background-color: var(--bg-body);
+}
+
+html.dark-mode section h2 {
+  color: #e5e7eb;
+}
+
+/* Hero: bg-light do Bootstrap ficaria branco sem a imagem */
+html.dark-mode #inicio.bg-light {
+  background-color: var(--bg-body) !important;
+}
+
+/* Cards */
+html.dark-mode .card {
+  background-color: var(--bg-card);
+  color: var(--text-dark);
+}
+
+html.dark-mode .card .text-muted {
+  color: var(--text-muted) !important;
+}
+
+/* Formulário */
+html.dark-mode #contact-form {
+  background-color: var(--bg-surface);
+}
+
+html.dark-mode .form-label {
+  color: var(--text-dark) !important;
+}
+
+html.dark-mode .form-control {
+  background-color: #374151;
+  color: #f3f4f6;
+  border-color: #4b5563;
+}
+
+html.dark-mode .form-control::placeholder {
+  color: #6b7280;
+}
+
+html.dark-mode .form-control:focus {
+  background-color: #374151;
+  color: #f3f4f6;
+}
+
+html.dark-mode .form-text {
+  color: var(--text-muted) !important;
+}
+
+/* Texto muted genérico */
+html.dark-mode .text-muted {
+  color: var(--text-muted) !important;
+}
+
+/* Divisor de contato */
+html.dark-mode .contact-divider {
+  color: #6b7280;
+}
+
+html.dark-mode .contact-divider::before,
+html.dark-mode .contact-divider::after {
+  border-top-color: var(--border-color);
+}
+
+/* Botão toggle dark mode na navbar */
+#dark-mode-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  transition: color var(--transition-speed) ease;
+}
+
+#dark-mode-toggle:hover {
+  color: #ffffff;
+}
+
+#dark-mode-toggle svg {
+  display: block;
 }
 
 /* ============================================
