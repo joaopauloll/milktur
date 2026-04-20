@@ -1,40 +1,28 @@
-// Dados das viagens disponíveis
-const viagens = [
-  {
-    nome: "Sul da Bahia",
-    descricao: "Porto Seguro, Trancoso e Arraial d'Ajuda te esperam!",
-    imagem: "assets/imgs/bahia.png",
-    pdf: "assets/pdfs/sul-da-bahia.pdf",
-  },
-  {
-    nome: "Turquia e Dubai",
-    descricao: "Explore a rica cultura da Turquia e o luxo de Dubai.",
-    imagem: "assets/imgs/turquia.png",
-    pdf: "assets/pdfs/turquia-e-dubai.pdf",
-  },
-  {
-    nome: "Fortaleza e Canoa Quebrada",
-    descricao: "Sol, mar e diversão no Ceará.",
-    imagem: "assets/imgs/canoa-quebrada.png",
-    pdf: "",
-  },
-  {
-    nome: "Semana Santa",
-    descricao: "Recife, Gravatá e Nova Jerusalém.",
-    imagem: "assets/imgs/jerusalem.png",
-    pdf: "assets/pdfs/semana-santa.pdf",
-  },
-];
+// ============================================================
+// CONFIGURAÇÃO DO EMAILJS
+// ✏️ Substitua os valores abaixo com suas credenciais em:
+//    https://dashboard.emailjs.com
+// ============================================================
+const EMAILJS_PUBLIC_KEY = "SUA_PUBLIC_KEY_AQUI";
+const EMAILJS_SERVICE_ID = "SEU_SERVICE_ID_AQUI";
+const EMAILJS_TEMPLATE_ID = "SEU_TEMPLATE_ID_AQUI";
 
-// ============================================
+// Inicializa EmailJS apenas se o SDK estiver carregado e a chave configurada
+if (
+  typeof emailjs !== "undefined" &&
+  EMAILJS_PUBLIC_KEY !== "SUA_PUBLIC_KEY_AQUI"
+) {
+  emailjs.init(EMAILJS_PUBLIC_KEY);
+}
+
+// ============================================================
 // NAVBAR SCROLL HIGHLIGHT
-// ============================================
+// ============================================================
 const sections = document.querySelectorAll("section");
 const navLinks = document.querySelectorAll(".nav-link");
 let scrollTimeout;
 
 window.addEventListener("scroll", () => {
-  // Debounce para melhor performance
   clearTimeout(scrollTimeout);
   scrollTimeout = setTimeout(() => {
     let current = "";
@@ -60,89 +48,125 @@ window.addEventListener("scroll", () => {
   }, 50);
 });
 
-// ============================================
-// CARDS DINÂMICOS E MODALS
-// ============================================
+// ============================================================
+// CARDS DINÂMICOS E MODALS — carregados via fetch do JSON
+// ============================================================
 const container = document.getElementById("cards-container");
 const modalsContainer = document.getElementById("modals-container");
 
-viagens.forEach((viagem, index) => {
-  // Criar card
-  const cardHTML = `
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="card h-100 shadow">
-        <img src="${viagem.imagem}" 
-             class="card-img-top card-img-fixed" 
-             alt="Destino ${viagem.nome}" 
-             loading="lazy">
-        <div class="card-body">
-          <h5 class="card-title">${viagem.nome}</h5>
-          <p class="card-text">${viagem.descricao}</p>
-          <button 
-            class="btn btn-secondary w-100 ${viagem.pdf ? "" : "disabled"}"
-            ${viagem.pdf ? `data-bs-toggle="modal" data-bs-target="#modal${index}"` : ""}
-            aria-label="Ver detalhes de ${viagem.nome}">
-            Ver Detalhes
-          </button>
-        </div>
-      </div>
-    </div>
-  `;
-  container.insertAdjacentHTML("beforeend", cardHTML);
+/**
+ * Renderiza os cards e modals a partir do array de viagens.
+ * Usa <picture> + <source> para servir .webp (quando disponível) com fallback .png
+ * O campo "imagem" sempre aponta para o .png (que existe).
+ * O campo "imagemWebp" aponta para o .webp — só é usado quando o arquivo existir.
+ */
+function renderizarViagens(viagens) {
+  viagens.forEach((viagem, index) => {
+    // Se houver versão webp, usa <picture> para oferecer as duas opções ao navegador
+    const pictureHTML = viagem.imagemWebp
+      ? `<picture>
+           <source srcset="${viagem.imagemWebp}" type="image/webp">
+           <img src="${viagem.imagem}"
+                class="card-img-top card-img-fixed"
+                alt="Destino ${viagem.nome}"
+                loading="lazy">
+         </picture>`
+      : `<img src="${viagem.imagem}"
+              class="card-img-top card-img-fixed"
+              alt="Destino ${viagem.nome}"
+              loading="lazy">`;
 
-  // Criar modal apenas se houver PDF
-  if (viagem.pdf) {
-    const modalHTML = `
-      <div class="modal fade modal-fullscreen-vertical" id="modal${index}" tabindex="-1" aria-labelledby="modal${index}-title" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="modal${index}-title">${viagem.nome}</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar modal"></button>
-            </div>
-            <div class="modal-body">
-              <iframe 
-                src="${viagem.pdf}" 
-                title="Detalhes de ${viagem.nome}"
-                aria-label="PDF com detalhes de ${viagem.nome}">
-              </iframe>
-            </div>
+    const cardHTML = `
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100 shadow">
+          ${pictureHTML}
+          <div class="card-body">
+            <h5 class="card-title">${viagem.nome}</h5>
+            <p class="card-text">${viagem.descricao}</p>
+            <button
+              class="btn btn-secondary w-100 ${viagem.pdf ? "" : "disabled"}"
+              ${viagem.pdf ? `data-bs-toggle="modal" data-bs-target="#modal${index}"` : ""}
+              aria-label="Ver detalhes de ${viagem.nome}">
+              Ver Detalhes
+            </button>
           </div>
         </div>
       </div>
     `;
-    modalsContainer.insertAdjacentHTML("beforeend", modalHTML);
-  }
-});
+    container.insertAdjacentHTML("beforeend", cardHTML);
 
-// ============================================
-// VALIDAÇÃO E ENVIO DE FORMULÁRIO
-// ============================================
+    if (viagem.pdf) {
+      const modalHTML = `
+        <div class="modal fade modal-fullscreen-vertical" id="modal${index}" tabindex="-1" aria-labelledby="modal${index}-title" aria-hidden="true">
+          <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modal${index}-title">${viagem.nome}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar modal"></button>
+              </div>
+              <div class="modal-body">
+                <iframe
+                  src="${viagem.pdf}"
+                  title="Detalhes de ${viagem.nome}"
+                  aria-label="PDF com detalhes de ${viagem.nome}">
+                </iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      modalsContainer.insertAdjacentHTML("beforeend", modalHTML);
+    }
+  });
+}
+
+/**
+ * Exibe mensagem de erro amigável no container de cards
+ */
+function exibirErroViagens() {
+  container.innerHTML = `
+    <div class="col-12 text-center py-5">
+      <p class="text-muted fs-5">
+        Não foi possível carregar as viagens no momento.<br>
+        <small>Tente recarregar a página.</small>
+      </p>
+    </div>
+  `;
+}
+
+// Buscar viagens do JSON externo (compatível com GitHub Pages)
+fetch("data/viagens.json")
+  .then((res) => {
+    if (!res.ok) throw new Error("Falha ao carregar viagens.json");
+    return res.json();
+  })
+  .then(renderizarViagens)
+  .catch((err) => {
+    console.error("Erro ao carregar viagens:", err);
+    exibirErroViagens();
+  });
+
+// ============================================================
+// VALIDAÇÃO E ENVIO DE FORMULÁRIO VIA EMAILJS
+// ============================================================
 const contactForm = document.getElementById("contact-form");
 const submitBtn = document.getElementById("submit-btn");
 const formMessage = document.getElementById("form-message");
-
-// Obter todos os campos do formulário
 const formInputs = contactForm.querySelectorAll(
   "input[required], textarea[required]",
 );
 
-// Adicionar validação em tempo real (apenas quando o usuário digita)
+// Validação em tempo real — só após interação do usuário
 formInputs.forEach((input) => {
-  input.addEventListener("blur", () => {
-    validarCampo(input);
-  });
+  input.addEventListener("blur", () => validarCampo(input));
 
   input.addEventListener("input", () => {
-    // Se o campo já foi validado antes (tem a classe was-validated),
-    // continua validando conforme digita
     if (contactForm.classList.contains("was-validated")) {
       validarCampo(input);
     }
   });
 });
 
-// Função para validar um campo específico
 function validarCampo(input) {
   if (!input.validity.valid) {
     input.classList.add("is-invalid");
@@ -153,67 +177,92 @@ function validarCampo(input) {
   }
 }
 
-// Envio do formulário com validação completa
-contactForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  // Marcar formulário como foi tentado enviar
-  contactForm.classList.add("was-validated");
-
-  // Validar todos os campos
-  formInputs.forEach((input) => {
-    validarCampo(input);
+// ============================================================
+// MÁSCARA DE TELEFONE — (00) 00000-0000 ou (00) 0000-0000
+// ============================================================
+const telefoneInput = document.getElementById("telefone");
+if (telefoneInput) {
+  telefoneInput.addEventListener("input", (e) => {
+    let v = e.target.value.replace(/\D/g, "").slice(0, 11);
+    if (v.length > 10) {
+      // Celular: (00) 00000-0000
+      v = v.replace(/^(\d{2})(\d{5})(\d{0,4})/, "($1) $2-$3");
+    } else if (v.length > 6) {
+      // Fixo: (00) 0000-0000
+      v = v.replace(/^(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
+    } else if (v.length > 2) {
+      v = v.replace(/^(\d{2})(\d{0,5})/, "($1) $2");
+    } else if (v.length > 0) {
+      v = v.replace(/^(\d{0,2})/, "($1");
+    }
+    e.target.value = v;
   });
 
-  // Se há campos inválidos, não enviar
-  if (!contactForm.checkValidity()) {
-    return;
-  }
+  // Garante que ao colar o número ele seja formatado
+  telefoneInput.addEventListener("paste", () => {
+    setTimeout(() => telefoneInput.dispatchEvent(new Event("input")), 0);
+  });
+}
 
-  // Desabilitar botão e mostrar loading
+// Envio do formulário
+contactForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  contactForm.classList.add("was-validated");
+  formInputs.forEach((input) => validarCampo(input));
+
+  if (!contactForm.checkValidity()) return;
+
+  // Loading
   submitBtn.disabled = true;
   document.getElementById("submit-spinner").classList.remove("d-none");
   document.getElementById("submit-text").classList.add("d-none");
+  formMessage.innerHTML = "";
+  formMessage.className = "mt-3";
+
+  // Parâmetros enviados ao template do EmailJS
+  // ✏️ Os nomes das variáveis (from_name, from_email, etc.) devem
+  //    corresponder às variáveis configuradas no seu template EmailJS
+  const templateParams = {
+    from_name: document.getElementById("nome").value,
+    from_email: document.getElementById("email").value,
+    from_phone: document.getElementById("telefone").value || "Não informado",
+    message: document.getElementById("mensagem").value,
+  };
 
   try {
-    // Coletar dados do formulário
-    const formData = {
-      nome: document.getElementById("nome").value,
-      email: document.getElementById("email").value,
-      telefone: document.getElementById("telefone").value || "Não informado",
-      mensagem: document.getElementById("mensagem").value,
-      timestamp: new Date().toISOString(),
-    };
+    // Verificar se EmailJS está configurado antes de tentar enviar
+    if (
+      typeof emailjs === "undefined" ||
+      EMAILJS_PUBLIC_KEY === "SUA_PUBLIC_KEY_AQUI"
+    ) {
+      throw new Error("EmailJS não configurado");
+    }
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
 
-    // Simular envio (em produção, enviar para um backend)
-    console.log("Dados do formulário:", formData);
-
-    // Simular delay de envio
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    // Mensagem de sucesso
-    formMessage.className = "alert alert-success";
+    formMessage.className = "alert alert-success mt-3";
     formMessage.innerHTML =
-      "<strong>✓ Sucesso!</strong> Sua mensagem foi enviada com sucesso. Entraremos em contato em breve.";
+      "<strong>✓ Mensagem enviada!</strong> Entraremos em contato em breve.";
 
-    // Resetar formulário
     contactForm.reset();
     contactForm.classList.remove("was-validated");
+    formInputs.forEach((input) => {
+      input.classList.remove("is-valid", "is-invalid");
+    });
   } catch (error) {
-    // Mensagem de erro
-    formMessage.className = "alert alert-danger";
-    formMessage.innerHTML =
-      "<strong>✗ Erro!</strong> Houve um problema ao enviar sua mensagem. Tente novamente.";
-    console.error("Erro ao enviar formulário:", error);
+    const naoConfigurado = error.message === "EmailJS não configurado";
+    formMessage.className = "alert alert-danger mt-3";
+    formMessage.innerHTML = naoConfigurado
+      ? "<strong>Formulário não configurado.</strong> Configure o EmailJS em script.js para ativar o envio."
+      : "<strong>✗ Erro ao enviar.</strong> Tente novamente ou entre em contato pelo WhatsApp.";
+    console.error("EmailJS error:", error);
   } finally {
-    // Reabilitar botão
     submitBtn.disabled = false;
     document.getElementById("submit-spinner").classList.add("d-none");
     document.getElementById("submit-text").classList.remove("d-none");
 
-    // Remover mensagem após 6 segundos
     setTimeout(() => {
       formMessage.innerHTML = "";
-    }, 6000);
+      formMessage.className = "mt-3";
+    }, 7000);
   }
 });

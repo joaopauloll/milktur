@@ -1,77 +1,53 @@
-# 🌍 Milktur - Agência de Viagens
+# Milktur - Agência de Viagens
 
-Uma agência de viagens moderna e responsiva, com pacotes de destinos nacionais e internacionais. O site apresenta as viagens disponíveis, permite visualizar detalhes em PDFs, e oferece um formulário de contato funcional.
+Site estático de agência de viagens com destinos nacionais e internacionais. Compatível com GitHub Pages — sem backend necessário.
 
-## 📋 Tabela de Conteúdos
+## Características
 
-- [Características](#características)
-- [Requisitos](#requisitos)
-- [Como Executar](#como-executar)
-- [Estrutura do Projeto](#estrutura-do-projeto)
-- [Como Adicionar Novas Viagens](#como-adicionar-novas-viagens)
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- Responsivo: desktop, tablet e mobile
+- Acessível: ARIA, navegação por teclado, `prefers-reduced-motion`
+- SEO: meta tags, Open Graph, Twitter Card, JSON-LD (TravelAgency), sitemap e robots.txt
+- Formulário de contato com EmailJS (envio real de e-mail)
+- Máscara automática no campo de telefone
+- Botão flutuante de WhatsApp
+- Viagens carregadas via `fetch` a partir de `data/viagens.json`
+- Modais com visualização de PDF em tela cheia
+- Validação de formulário em tempo real (feedback só após interação)
+- Parallax no hero desativado em mobile (bug iOS/Android)
+- Suporte preparado para imagens `.webp` com fallback `.png`
 
-## ✨ Características
+## Como Executar
 
-- ✅ **Responsivo**: Adaptado para desktop, tablet e mobile
-- ✅ **Acessível**: Suporte a leitores de tela e navegação por teclado
-- ✅ **SEO Otimizado**: Meta tags e estrutura semântica
-- ✅ **Validação de Formulário**: Feedback visual em tempo real
-- ✅ **Navegação Suave**: Destaque automático na barra de navegação
-- ✅ **Modais Dinâmicos**: Visualização de PDFs em modal fullscreen
-- ✅ **Animações**: Efeitos visuais suaves e profissionais
-- ✅ **Sem Dependências Backend**: Funciona completamente no navegador
+O projeto requer um servidor HTTP local para que o `fetch` do JSON funcione corretamente. Abrir `index.html` diretamente pelo sistema de arquivos (`file://`) não funciona.
 
-## 📦 Requisitos
+**Live Server (VS Code)** — recomendado para desenvolvimento: instale a extensão Live Server e clique em "Go Live".
 
-- Navegador moderno (Chrome, Firefox, Safari, Edge)
-- Arquivo `index.html` e seus arquivos estáticos (CSS, JS, imagens)
-- **Opcional**: Um servidor HTTP local (para desenvolvimento melhor)
+**Python:**
 
-## 🚀 Como Executar
-
-### Opção 1: Abrir Direto no Navegador (Mais Simples)
-
-1. Navegue até a pasta do projeto
-2. Clique duplo em `index.html` ou
-3. Arraste `index.html` para o navegador
-
-**Desvantagem**: Alguns recursos podem não funcionar perfeitamente (como `loading="lazy"`)
-
-### Opção 2: Usar um Servidor HTTP Local (Recomendado)
-
-#### Com Python 3:
 ```bash
 python -m http.server 8000
 ```
-Depois acesse: `http://localhost:8000`
 
-#### Com Python 2:
-```bash
-python -m SimpleHTTPServer 8000
-```
-Depois acesse: `http://localhost:8000`
+**Node.js:**
 
-#### Com Node.js (http-server):
 ```bash
 npx http-server -p 8000
 ```
-Depois acesse: `http://localhost:8000`
 
-#### Com PHP:
-```bash
-php -S localhost:8000
-```
-Depois acesse: `http://localhost:8000`
+Acesse `http://localhost:8000` no navegador.
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 milktur/
-├── index.html          # Página principal
-├── script.js           # Lógica JavaScript
-├── styles.css          # Estilos CSS
-├── README.md          # Este arquivo
+├── index.html           # Página principal
+├── script.js            # Lógica JavaScript
+├── styles.css           # Estilos CSS
+├── sitemap.xml          # Sitemap para SEO
+├── robots.txt           # Diretivas para crawlers
+├── README.md
+├── data/
+│   └── viagens.json     # Dados das viagens (edite aqui para adicionar/remover)
 └── assets/
     ├── imgs/
     │   ├── logos/
@@ -87,105 +63,101 @@ milktur/
         └── semana-santa.pdf
 ```
 
-## ➕ Como Adicionar Novas Viagens
+## Como Adicionar Novas Viagens
 
-### Passo 1: Adicionar Imagem e PDF
+1. Coloque a imagem em `assets/imgs/` e o PDF em `assets/pdfs/`
+2. Edite `data/viagens.json` e adicione um objeto ao array:
 
-1. Coloque a imagem em `assets/imgs/` (ex: `destino.png`)
-2. Coloque o PDF em `assets/pdfs/` (ex: `destino.pdf`)
-
-### Passo 2: Editar `script.js`
-
-Abra o arquivo `script.js` e adicione um novo objeto no array `viagens`:
-
-```javascript
+```json
 {
-  nome: "Nome do Destino",
-  descricao: "Descrição breve do destino",
-  imagem: "assets/imgs/destino.png",
-  pdf: "assets/pdfs/destino.pdf",  // Use "" se não houver PDF
+  "nome": "Nome do Destino",
+  "descricao": "Descrição breve.",
+  "imagem": "assets/imgs/destino.png",
+  "pdf": "assets/pdfs/destino.pdf"
 }
 ```
 
-**Exemplo completo:**
+Use `"pdf": ""` se não houver arquivo PDF — o botão "Ver Detalhes" ficará desabilitado automaticamente.
 
-```javascript
-const viagens = [
-  {
-    nome: "Sul da Bahia",
-    descricao: "Porto Seguro, Trancoso e Arraial d'Ajuda te esperam!",
-    imagem: "assets/imgs/bahia.png",
-    pdf: "assets/pdfs/sul-da-bahia.pdf",
-  },
-  // ... viagens existentes ...
-  
-  // Adicione aqui:
-  {
-    nome: "Maldivas",
-    descricao: "Paraíso tropical com praias de areia branca.",
-    imagem: "assets/imgs/maldivas.png",
-    pdf: "assets/pdfs/maldivas.pdf",
-  },
-];
+### Suporte a imagens .webp (opcional)
+
+Quando você converter uma imagem para `.webp`, adicione o campo `imagemWebp` no JSON:
+
+```json
+{
+  "nome": "Sul da Bahia",
+  "imagem": "assets/imgs/bahia.png",
+  "imagemWebp": "assets/imgs/bahia.webp",
+  "pdf": "assets/pdfs/sul-da-bahia.pdf"
+}
 ```
 
-### Passo 3: Salvar e Recarregar
+O JS gera `<picture><source type="image/webp">` automaticamente quando o campo existir. **Importante:** só adicione `imagemWebp` quando o arquivo `.webp` de fato existir na pasta — caso contrário a imagem não aparecerá.
 
-Salve o arquivo e recarregue a página no navegador (`Ctrl+F5` ou `Cmd+Shift+R` para limpar cache).
+## Configurar EmailJS
 
-## 🛠️ Tecnologias Utilizadas
+O formulário de contato usa [EmailJS](https://emailjs.com) para enviar e-mails sem backend.
 
-| Tecnologia | Descrição |
-|-----------|-----------|
-| **HTML5** | Estrutura semântica |
-| **CSS3** | Estilos com variáveis CSS e animações |
-| **JavaScript** | Lógica e interatividade (Vanilla JS, sem frameworks) |
-| **Bootstrap 5** | Framework CSS para responsividade |
+**Passos:**
 
-## 📱 Responsividade
+1. Crie uma conta em [emailjs.com](https://emailjs.com)
+2. Crie um **Email Service** (Gmail, Outlook, etc.)
+3. Crie um **Email Template** com as variáveis: `{{from_name}}`, `{{from_email}}`, `{{from_phone}}`, `{{message}}`
+4. Copie suas chaves e edite o topo de `script.js`:
 
-O projeto é otimizado para:
+```js
+const EMAILJS_PUBLIC_KEY = "sua_public_key";
+const EMAILJS_SERVICE_ID  = "seu_service_id";
+const EMAILJS_TEMPLATE_ID = "seu_template_id";
+```
 
-- **Desktop**: 1200px+
-- **Tablet**: 768px a 1199px
-- **Mobile**: Até 767px
+Enquanto não configurado, o formulário exibe uma mensagem informativa e o restante do site continua funcionando normalmente.
 
-## ♿ Acessibilidade
+## Configurar WhatsApp
 
-- Navegação por teclado completa
-- Atributos ARIA para leitores de tela
-- Contraste de cores adequado
-- Respeito às preferências de movimento reduzido
+Edite o `href` do botão flutuante em `index.html`:
 
-## 🎨 Customização
+```html
+<a href="https://wa.me/5511999999999" ...>
+```
 
-### Cores Principais
+Formato: `55` + DDD + número, sem espaços ou caracteres especiais.
 
-Edite o arquivo `styles.css` para mudar as cores:
+## Configurar SEO
+
+Substitua `https://seudominio.com` pelo seu domínio real em:
+
+- `index.html` — meta canonical, og:url, og:image, twitter:image e JSON-LD
+- `sitemap.xml`
+- `robots.txt`
+
+Adicione também uma imagem para compartilhamento social em `assets/imgs/og-image.png` (tamanho recomendado: 1200×630 px).
+
+## Customização de Cores
+
+Edite as variáveis no topo de `styles.css`:
 
 ```css
 :root {
-  --primary-color: #242f60;      /* Azul principal */
-  --secondary-color: #254f9c;    /* Azul secundário */
-  --tertiary-color: #25989c;     /* Turquesa */
+  --primary-color:   #242f60;  /* Azul escuro (navbar, footer, botões) */
+  --secondary-color: #254f9c;  /* Azul médio (botões de cards) */
+  --tertiary-color:  #25989c;  /* Turquesa (seção Sobre) */
 }
 ```
 
-### Informações de Contato
+## Tecnologias
 
-As informações de contato ainda não possuem integração com backend. Para implementar:
-
-1. Configure um endpoint backend para receber o formulário
-2. Atualize o evento `submit` em `script.js` para enviar os dados
-
-## 📧 Contato e Suporte
-
-Para dúvidas ou sugestões sobre o projeto, entre em contato através do formulário no site ou abra uma issue.
-
-## 📄 Licença
-
-© 2025 Milktur - Todos os direitos reservados.
+| Tecnologia | Uso |
+|---|---|
+| HTML5 | Estrutura semântica |
+| CSS3 | Variáveis CSS, animações, responsividade |
+| JavaScript (Vanilla) | Fetch, validação, máscara, modais dinâmicos |
+| Bootstrap 5 | Grid, componentes, utilitários |
+| EmailJS | Envio de formulário sem backend |
 
 ---
 
-**Desenvolvido com ❤️ para oferecer as melhores experiências de viagem.**
+© 2025 Milktur — Todos os direitos reservados.
+
+
+

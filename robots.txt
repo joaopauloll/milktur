@@ -1,0 +1,5 @@
+# ✏️ Substitua "https://seudominio.com" pelo seu domínio real
+User-agent: *
+Allow: /
+
+Sitemap: https://seudominio.com/sitemap.xml

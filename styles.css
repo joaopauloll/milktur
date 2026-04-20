@@ -333,11 +333,18 @@ footer p {
    ============================================ */
 #inicio {
   position: relative;
-  background-attachment: fixed;
+  background-attachment: fixed; /* parallax no desktop */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   min-height: 100vh;
+}
+
+/* Desativa parallax em mobile (bug de rendering no iOS/Android) */
+@media (max-width: 768px) {
+  #inicio {
+    background-attachment: scroll;
+  }
 }
 
 #inicio::before {
@@ -473,11 +480,56 @@ section h2::after {
 @media print {
   .navbar,
   footer,
-  #contact-form {
+  #contact-form,
+  .whatsapp-fab {
     display: none;
   }
 
   body {
     background: white;
+  }
+}
+
+/* ============================================
+   BOTÃO FLUTUANTE WHATSAPP
+   ✏️ Para mudar o número, edite o href no index.html
+   ============================================ */
+.whatsapp-fab {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 1050;
+  background-color: #25d366;
+  color: white;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  text-decoration: none;
+}
+
+.whatsapp-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  color: white;
+}
+
+.whatsapp-fab:focus-visible {
+  outline: 3px solid #25d366;
+  outline-offset: 3px;
+}
+
+@media (max-width: 576px) {
+  .whatsapp-fab {
+    bottom: 1rem;
+    right: 1rem;
+    width: 50px;
+    height: 50px;
   }
 }
