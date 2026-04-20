@@ -85,7 +85,7 @@ function renderizarViagens(viagens) {
             <p class="card-text">${viagem.descricao}</p>
             <button
               class="btn btn-secondary w-100 ${viagem.pdf ? "" : "disabled"}"
-              ${viagem.pdf ? `data-bs-toggle="modal" data-bs-target="#modal${index}"` : ""}
+              ${viagem.pdf ? `data-pdf="${viagem.pdf}" data-modal="#modal${index}"` : ""}
               aria-label="Ver detalhes de ${viagem.nome}">
               Ver Detalhes
             </button>
@@ -145,6 +145,29 @@ fetch("data/viagens.json")
     console.error("Erro ao carregar viagens:", err);
     exibirErroViagens();
   });
+
+// ============================================================
+// VISUALIZAÇÃO DE PDF — modal no desktop, nova aba no mobile
+// iOS Safari não renderiza <iframe> com PDF, por isso usamos
+// nova aba em dispositivos touch/mobile (≤ 768px).
+// ============================================================
+container.addEventListener("click", (e) => {
+  const btn = e.target.closest("button[data-pdf]");
+  if (!btn) return;
+
+  const pdfUrl = btn.dataset.pdf;
+  const modalTarget = btn.dataset.modal;
+  const isMobile = window.innerWidth <= 768 || "ontouchstart" in window;
+
+  if (isMobile) {
+    window.open(pdfUrl, "_blank", "noopener,noreferrer");
+  } else {
+    const modalEl = document.querySelector(modalTarget);
+    if (modalEl) {
+      bootstrap.Modal.getOrCreateInstance(modalEl).show();
+    }
+  }
+});
 
 // ============================================================
 // VALIDAÇÃO E ENVIO DE FORMULÁRIO VIA EMAILJS
