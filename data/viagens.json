@@ -1,27 +1,21 @@
 [
   {
-    "nome": "Sul da Bahia Teste",
-    "descricao": "Porto Seguro, Trancoso e Arraial d'Ajuda te esperam!",
-    "imagem": "assets/imgs/bahia.png",
-    "imagemWebp": "assets/imgs/bahia.webp",
-    "pdf": "assets/pdfs/sul-da-bahia.pdf"
+    "nome": "Escandinávia",
+    "descricao": "Descubra as belezas naturais e culturais da Escandinávia.",
+    "imagem": "assets/imgs/escandinavia.png",
+    "imagemWebp": "assets/imgs/escandinavia.webp",
+    "pdf": "assets/pdfs/escandinavia.pdf"
   },
   {
-    "nome": "Turquia e Dubai",
-    "descricao": "Explore a rica cultura da Turquia e o luxo de Dubai.",
-    "imagemWebp": "assets/imgs/turquia.webp",
-    "pdf": "assets/pdfs/turquia-e-dubai.pdf"
+    "nome": "Monte Verde, Campos do Jordão, Aparecida, Guaratinguetá e São Paulo",
+    "descricao": "Explore a rica cultura dessas cidades e suas atrações.",
+    "imagemWebp": "assets/imgs/campos.webp",
+    "pdf": "assets/pdfs/monte-verde-campos.pdf"
   },
   {
-    "nome": "Fortaleza e Canoa Quebrada",
-    "descricao": "Sol, mar e diversão no Ceará.",
-    "imagemWebp": "assets/imgs/canoa-quebrada.webp",
-    "pdf": ""
-  },
-  {
-    "nome": "Semana Santa",
-    "descricao": "Recife, Gravatá e Nova Jerusalém.",
-    "imagemWebp": "assets/imgs/jerusalem.webp",
-    "pdf": "assets/pdfs/semana-santa.pdf"
+    "nome": "El Aram Beach Cabo All Inclusive",
+    "descricao": "Cenário paradisíaco à beira-mar com sistema all inclusive 24 horas.",
+    "imagemWebp": "assets/imgs/elaram.webp",
+    "pdf": "assets/pdfs/el-aram-beach-cabo.pdf"
   }
 ]
